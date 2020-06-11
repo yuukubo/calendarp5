@@ -1,17 +1,32 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c1.1"
+let game_title = "* calendarp5 * c2.2"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
-let calendar_Y = canvas_H / 2;
+let calendar_Y = canvas_H / 12;
 let calendar_W = 200;
-let calendar_H = 100;
+let calendar_H = 50;
 let calendar_RGB = [150, 150, 150];
 let is_calendar_on = 0;
 let background_RGB = [230, 230 ,230];
 let on_RGB = [250, 250, 250, 150];
 let off_RGB = [50, 50, 50, 150];
 let is_touch = 0;
+
+let DOW = ["日", "月", "火", "水", "木", "金", "土"]
+let last_day = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+let first_DOW_X = canvas_W / 10;
+let first_DOW_Y = canvas_H * 3 / 12;
+let DOW_cell_W = canvas_W * 2 / 20;
+let DOW_cell_H = canvas_H * 2 / 20;
+let frame_RGB = [200, 200, 200];
+
+let first_day_X = canvas_W / 10;
+let first_day_Y = canvas_H * 5 / 12;
+let day_cell_W = canvas_W * 2 / 20;
+let day_cell_H = canvas_H * 2 / 20;
+let day_cell_RGB = [190, 190, 190];
 
 function setup() {
   window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
@@ -30,6 +45,8 @@ function draw() {
     touched();
     is_touch = 0;
   }
+  set_frame(frame_RGB[0], frame_RGB[1], frame_RGB[2], first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H);
+  set_day_cell(day_cell_RGB[0], day_cell_RGB[1], day_cell_RGB[2], first_day_X, first_day_Y, day_cell_W, day_cell_H);
   set_pointer();
 }
 
@@ -60,6 +77,50 @@ function mousePressed() {
     }
   }
 }
+function set_frame(frame_R, frame_G, frame_B, first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H) {
+  push();
+  noStroke();
+  rectMode(CENTER);
+  fill(frame_R, frame_G, frame_B);
+  for (let i=0; i<DOW.length; i++) {
+    rect(first_DOW_X * (i+1), first_DOW_Y, DOW_cell_W, DOW_cell_H, 4);
+  }
+  
+  textSize(20);
+  textFont("Crimson Text");
+  textAlign(CENTER, CENTER);
+  noStroke();
+  fill(10);
+  for (let i=0; i<DOW.length; i++) {
+    text(DOW[i], first_DOW_X * (i+1), first_DOW_Y);
+  }
+
+  pop();
+}
+function set_day_cell(day_cell_R, day_cell_G, day_cell_B, first_day_X, first_day_Y, day_cell_W, day_cell_H) {
+  push();
+  noStroke();
+  rectMode(CENTER);
+  fill(day_cell_R, day_cell_G, day_cell_B);
+  for (let i=0; i<7; i++) {
+    for (let j=0; j<6; j++) {
+      rect(first_day_X* (i+1), first_day_Y + day_cell_H * j, day_cell_W, day_cell_H, 4);
+    }
+  }
+
+  textSize(9);
+  textFont("Crimson Text");
+  textAlign(CENTER, CENTER);
+  noStroke();
+  fill(10);
+  for (let i=0; i<7; i++) {
+    for (let j=0; j<6; j++) {
+      text("i=" + i +", j="+ j, first_day_X * (i+1), first_day_Y + day_cell_H * j);
+    }
+  }
+
+  pop();
+}
 function set_calendar(calendar_R, calendar_G, calendar_B, calendar_X, calendar_Y, calendar_W, calendar_H, today_ojb) {
   push();
   noStroke();
@@ -76,7 +137,7 @@ function set_calendar(calendar_R, calendar_G, calendar_B, calendar_X, calendar_Y
   textAlign(CENTER, CENTER);
   noStroke();
   fill(10);
-  text(today_ojb.getFullYear() + " / " + nf((today_ojb.getMonth()+1), 2) + " / " + nf(today_ojb.getDate(), 2), calendar_X, calendar_Y);
+  text(today_ojb.getFullYear() + " / " + nf((today_ojb.getMonth()+1), 2), calendar_X, calendar_Y);
 
   pop();
 }
