@@ -1,6 +1,6 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c6.0"
+let game_title = "* calendarp5 * c7.2"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
 let calendar_Y = canvas_H / 12;
@@ -54,19 +54,7 @@ let button_arr = [next_month_XYWHtext, prev_month_XYWHtext];
 let button_RGB = [210, 210, 210];
 
 let day_arr = [];
-for (let i=0; i<disp_date_ojb.getDay(); i++) {
-  day_arr.push(" ");
-}
-
-for (let i=0; i<last_day[disp_month-1]; i++) {
-  day_arr.push(i+1);
-}
-
 let padding_cnt = 6*7 - day_arr.length;
-for (let i=0; i<padding_cnt; i++) {
-  day_arr.push(" ");
-}
-
 let day_arr_cnt = 0;
 
 function setup() {
@@ -74,7 +62,7 @@ function setup() {
   window.addEventListener("touchmove",  function (event) { event.preventDefault(); }, { passive: false });
   createCanvas(canvas_W, canvas_H);
   rectMode(CENTER);
-  
+  set_day_arr();
 }
 
 function draw() {
@@ -85,9 +73,6 @@ function draw() {
     is_touch = 0;
   }
   set_game_title();
-  if (day_arr_cnt==0) {
-    set_day_arr();
-  }
   set_frame(frame_RGB[0], frame_RGB[1], frame_RGB[2], first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H);
   set_day_cell(day_cell_RGB[0], day_cell_RGB[1], day_cell_RGB[2], first_day_X, first_day_Y, day_cell_W, day_cell_H, day_arr, day_arr_cnt);
   set_button(button_RGB[0], button_RGB[1], button_RGB[2], button_arr);
@@ -123,14 +108,12 @@ function mousePressed() {
   if (hit_chk(next_month_X, next_month_Y, next_month_W, next_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() + 1);
     disp_month = disp_date_ojb.getMonth() + 1;
-    day_arr_cnt = 0;
-    day_arr = [];
+    set_day_arr();
   }
   if (hit_chk(prev_month_X, prev_month_Y, prev_month_W, prev_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() - 1);
     disp_month = disp_date_ojb.getMonth() - 1;
-    day_arr_cnt = 0;
-    day_arr = [];
+    set_day_arr();
   }
 }
 function set_frame(frame_R, frame_G, frame_B, first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H) {
@@ -187,7 +170,7 @@ function set_day_cell(day_cell_R, day_cell_G, day_cell_B, first_day_X, first_day
       day_arr_cnt++;
     }
   }
-
+  day_arr_cnt = 0;
   pop();
 }
 function set_calendar(calendar_R, calendar_G, calendar_B, calendar_X, calendar_Y, calendar_W, calendar_H, disp_date_ojb) {
@@ -246,15 +229,17 @@ function hit_chk(target_X, target_Y, target_W, target_H) {
 }
 
 function set_day_arr() {
+  day_arr_cnt = 0;
+  day_arr = [];
   for (let i=0; i<disp_date_ojb.getDay(); i++) {
     day_arr.push(" ");
   }
-  
   for (let i=0; i<last_day[disp_month-1]; i++) {
     day_arr.push(i+1);
   }
-  
+  padding_cnt = 6*7 - day_arr.length;
   for (let i=0; i<padding_cnt; i++) {
     day_arr.push(" ");
   }  
+  console.log(day_arr);
 }
