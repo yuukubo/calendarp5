@@ -1,6 +1,6 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c5.8"
+let game_title = "* calendarp5 * c6.0"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
 let calendar_Y = canvas_H / 12;
@@ -36,13 +36,21 @@ let disp_year = disp_date_ojb.getFullYear();
 let disp_month = disp_date_ojb.getMonth() + 1;
 disp_date_ojb.setDate(1);
 
-let next_month_X = calendar_X + calendar_W;
+let next_month_X = calendar_X + calendar_W / 2;
 let next_month_Y = calendar_Y;
 let next_month_W = 50;
 let next_month_H = 50;
 let next_month_text = "->";
 let next_month_XYWHtext = [next_month_X, next_month_Y, next_month_W, next_month_H, next_month_text];
-let button_arr = [next_month_XYWHtext];
+
+let prev_month_X = calendar_X - calendar_W / 2;
+let prev_month_Y = calendar_Y;
+let prev_month_W = 50;
+let prev_month_H = 50;
+let prev_month_text = "<-";
+let prev_month_XYWHtext = [prev_month_X, prev_month_Y, prev_month_W, prev_month_H, prev_month_text];
+
+let button_arr = [next_month_XYWHtext, prev_month_XYWHtext];
 let button_RGB = [210, 210, 210];
 
 let day_arr = [];
@@ -115,6 +123,12 @@ function mousePressed() {
   if (hit_chk(next_month_X, next_month_Y, next_month_W, next_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() + 1);
     disp_month = disp_date_ojb.getMonth() + 1;
+    day_arr_cnt = 0;
+    day_arr = [];
+  }
+  if (hit_chk(prev_month_X, prev_month_Y, prev_month_W, prev_month_H)) {
+    disp_date_ojb.setMonth(disp_date_ojb.getMonth() - 1);
+    disp_month = disp_date_ojb.getMonth() - 1;
     day_arr_cnt = 0;
     day_arr = [];
   }
