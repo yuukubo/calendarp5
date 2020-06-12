@@ -1,6 +1,6 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c4.0"
+let game_title = "* calendarp5 * c5.8"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
 let calendar_Y = canvas_H / 12;
@@ -36,6 +36,15 @@ let disp_year = disp_date_ojb.getFullYear();
 let disp_month = disp_date_ojb.getMonth() + 1;
 disp_date_ojb.setDate(1);
 
+let next_month_X = calendar_X + calendar_W;
+let next_month_Y = calendar_Y;
+let next_month_W = 50;
+let next_month_H = 50;
+let next_month_text = "->";
+let next_month_XYWHtext = [next_month_X, next_month_Y, next_month_W, next_month_H, next_month_text];
+let button_arr = [next_month_XYWHtext];
+let button_RGB = [210, 210, 210];
+
 let day_arr = [];
 for (let i=0; i<disp_date_ojb.getDay(); i++) {
   day_arr.push(" ");
@@ -68,8 +77,12 @@ function draw() {
     is_touch = 0;
   }
   set_game_title();
+  if (day_arr_cnt==0) {
+    set_day_arr();
+  }
   set_frame(frame_RGB[0], frame_RGB[1], frame_RGB[2], first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H);
   set_day_cell(day_cell_RGB[0], day_cell_RGB[1], day_cell_RGB[2], first_day_X, first_day_Y, day_cell_W, day_cell_H, day_arr, day_arr_cnt);
+  set_button(button_RGB[0], button_RGB[1], button_RGB[2], button_arr);
   set_pointer();
 }
 
@@ -92,12 +105,18 @@ function touchEnded() {
   is_touch = 0;
 }
 function mousePressed() {
-  if ((calendar_X - calendar_W / 2 < mouseX && mouseX < calendar_X + calendar_W / 2) && (calendar_Y - calendar_H / 2 < mouseY && mouseY < calendar_Y + calendar_H / 2)) {
+  if (hit_chk(calendar_X, calendar_Y, calendar_W, calendar_H)) {
     if (is_calendar_on) {
       is_calendar_on = 0;
     } else {
       is_calendar_on = 1;
     }
+  }
+  if (hit_chk(next_month_X, next_month_Y, next_month_W, next_month_H)) {
+    disp_date_ojb.setMonth(disp_date_ojb.getMonth() + 1);
+    disp_month = disp_date_ojb.getMonth() + 1;
+    day_arr_cnt = 0;
+    day_arr = [];
   }
 }
 function set_frame(frame_R, frame_G, frame_B, first_DOW_X, first_DOW_Y, DOW_cell_W, DOW_cell_H) {
@@ -177,6 +196,21 @@ function set_calendar(calendar_R, calendar_G, calendar_B, calendar_X, calendar_Y
 
   pop();
 }
+function set_button(button_R, button_G, button_B, button_arr) {
+  push();
+  noStroke();
+  rectMode(CENTER);
+  textSize(20);
+  textFont("Crimson Text");
+  textAlign(CENTER, CENTER);
+  for (let i=0; i<button_arr.length; i++) {
+    fill(button_R, button_G, button_B);
+    rect(button_arr[i][0], button_arr[i][1], button_arr[i][2], button_arr[i][3], 4);
+    fill(10);
+    text(button_arr[i][4], button_arr[i][0], button_arr[i][1]);
+  }
+  pop();
+}
 
 function set_game_title() {
   push();
@@ -187,4 +221,26 @@ function set_game_title() {
   fill(10);
   text(game_title, canvas_W * 9 / 10, canvas_H -20);
   pop();
+}
+
+function hit_chk(target_X, target_Y, target_W, target_H) {
+  if ((target_X - target_W / 2 < mouseX && mouseX < target_X + target_W / 2) && (target_Y - target_H / 2 < mouseY && mouseY < target_Y + target_H / 2)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+function set_day_arr() {
+  for (let i=0; i<disp_date_ojb.getDay(); i++) {
+    day_arr.push(" ");
+  }
+  
+  for (let i=0; i<last_day[disp_month-1]; i++) {
+    day_arr.push(i+1);
+  }
+  
+  for (let i=0; i<padding_cnt; i++) {
+    day_arr.push(" ");
+  }  
 }
