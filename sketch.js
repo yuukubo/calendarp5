@@ -1,6 +1,6 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c7.2"
+let game_title = "* calendarp5 * c9.1"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
 let calendar_Y = canvas_H / 12;
@@ -237,6 +237,20 @@ function set_day_arr() {
   }
   for (let i=0; i<last_day[disp_month-1]; i++) {
     day_arr.push(i+1);
+  }
+  if (disp_month  == 2) {
+    console.log(disp_month);
+    if (disp_date_ojb.getFullYear() % 400 == 0) {
+      console.log("400 : " + disp_date_ojb.getFullYear());
+      day_arr.push(29);
+    } else if (disp_date_ojb.getFullYear() % 100 == 0) {
+      console.log("100 : " + disp_date_ojb.getFullYear());
+    } else if (disp_date_ojb.getFullYear() % 4 == 0) {
+      console.log("4 : " + disp_date_ojb.getFullYear());
+      day_arr.push(29);
+    } else {
+      console.log("no : " + disp_date_ojb.getFullYear());
+    }
   }
   padding_cnt = 6*7 - day_arr.length;
   for (let i=0; i<padding_cnt; i++) {
