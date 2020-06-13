@@ -8,3 +8,4 @@ https://yuukubo.github.io/calendarp5/
 # c5  : test next month  
 # c6  : test prev month  
 # c7  : fix bug ; arr init  
+# c7  : fix bug ; can't back to feb, jan  

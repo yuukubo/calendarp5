@@ -112,7 +112,7 @@ function mousePressed() {
   }
   if (hit_chk(prev_month_X, prev_month_Y, prev_month_W, prev_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() - 1);
-    disp_month = disp_date_ojb.getMonth() - 1;
+    disp_month = disp_date_ojb.getMonth() + 1;
     set_day_arr();
   }
 }
@@ -231,6 +231,7 @@ function hit_chk(target_X, target_Y, target_W, target_H) {
 function set_day_arr() {
   day_arr_cnt = 0;
   day_arr = [];
+  disp_date_ojb.setDate(1);
   for (let i=0; i<disp_date_ojb.getDay(); i++) {
     day_arr.push(" ");
   }
@@ -241,5 +242,4 @@ function set_day_arr() {
   for (let i=0; i<padding_cnt; i++) {
     day_arr.push(" ");
   }  
-  console.log(day_arr);
 }
