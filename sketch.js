@@ -1,11 +1,11 @@
 // calendarp5
 
-let game_title = "* calendarp5 * c9.1"
+let game_title = "* calendarp5 * c10.1"
 let [canvas_W, canvas_H] = [600, 400];
 let calendar_X = canvas_W / 2;
 let calendar_Y = canvas_H / 12;
 let calendar_W = 200;
-let calendar_H = 50;
+let calendar_H = 40;
 let calendar_RGB = [200, 200, 200];
 let sat_RGB = [10, 10, 250];
 let sun_RGB = [250, 10, 10];
@@ -39,14 +39,14 @@ disp_date_ojb.setDate(1);
 let next_month_X = calendar_X + calendar_W / 2;
 let next_month_Y = calendar_Y;
 let next_month_W = 50;
-let next_month_H = 50;
+let next_month_H = calendar_H;
 let next_month_text = "->";
 let next_month_XYWHtext = [next_month_X, next_month_Y, next_month_W, next_month_H, next_month_text];
 
 let prev_month_X = calendar_X - calendar_W / 2;
 let prev_month_Y = calendar_Y;
 let prev_month_W = 50;
-let prev_month_H = 50;
+let prev_month_H = calendar_H;
 let prev_month_text = "<-";
 let prev_month_XYWHtext = [prev_month_X, prev_month_Y, prev_month_W, prev_month_H, prev_month_text];
 
@@ -57,12 +57,23 @@ let day_arr = [];
 let padding_cnt = 6*7 - day_arr.length;
 let day_arr_cnt = 0;
 
+let chg_year_btn_X = calendar_X;
+let chg_year_btn_Y = calendar_Y + calendar_H  * 3 / 4;
+let chg_year_btn_W = calendar_W;
+let chg_year_btn_H = calendar_H;
+let chg_year_btn;
+let chg_year_btn_val;
+
 function setup() {
   window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
   window.addEventListener("touchmove",  function (event) { event.preventDefault(); }, { passive: false });
   createCanvas(canvas_W, canvas_H);
   rectMode(CENTER);
   set_day_arr();
+  chg_year_btn = createSelect();
+  chg_year_btn.position(chg_year_btn_X, chg_year_btn_Y);
+  set_yaer_list();
+  chg_year_btn.changed(selectForm);
 }
 
 function draw() {
@@ -107,12 +118,10 @@ function mousePressed() {
   }
   if (hit_chk(next_month_X, next_month_Y, next_month_W, next_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() + 1);
-    disp_month = disp_date_ojb.getMonth() + 1;
     set_day_arr();
   }
   if (hit_chk(prev_month_X, prev_month_Y, prev_month_W, prev_month_H)) {
     disp_date_ojb.setMonth(disp_date_ojb.getMonth() - 1);
-    disp_month = disp_date_ojb.getMonth() + 1;
     set_day_arr();
   }
 }
@@ -189,7 +198,8 @@ function set_calendar(calendar_R, calendar_G, calendar_B, calendar_X, calendar_Y
   textAlign(CENTER, CENTER);
   noStroke();
   fill(10);
-  text(disp_date_ojb.getFullYear() + " / " + nf((disp_date_ojb.getMonth()+1), 2), calendar_X, calendar_Y);
+//  text(disp_date_ojb.getFullYear() + " / " + nf((disp_date_ojb.getMonth()+1), 2), calendar_X, calendar_Y);
+  text(disp_year + " / " + nf(disp_month, 2), calendar_X, calendar_Y);
 
   pop();
 }
@@ -232,6 +242,8 @@ function set_day_arr() {
   day_arr_cnt = 0;
   day_arr = [];
   disp_date_ojb.setDate(1);
+  disp_month = disp_date_ojb.getMonth() + 1;
+  disp_year = disp_date_ojb.getFullYear();
   for (let i=0; i<disp_date_ojb.getDay(); i++) {
     day_arr.push(" ");
   }
@@ -256,4 +268,21 @@ function set_day_arr() {
   for (let i=0; i<padding_cnt; i++) {
     day_arr.push(" ");
   }  
+}
+function set_yaer_list() {
+  chg_year_btn.option("jump year");
+  for (let i=1970; i<2051; i++) {
+    chg_year_btn.option(i);
+  }
+}
+function selectForm() {
+  if (chg_year_btn.value() != "jump year") {
+    chg_year_btn_val = chg_year_btn.value();
+    disp_date_ojb.setFullYear(chg_year_btn_val);
+    disp_year = disp_date_ojb.getFullYear();
+    set_day_arr();
+    console.log("jump to : " + disp_year);
+  } else {
+    console.log("stay : " + disp_year);
+  }
 }

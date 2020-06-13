@@ -10,3 +10,4 @@ https://yuukubo.github.io/calendarp5/
 # c7  : fix bug ; arr init  
 # c8  : fix bug ; can't back to feb, jan  
 # c9  : add leap year  
+# c10 : add jump yaer  
