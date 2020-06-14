@@ -11,3 +11,4 @@ https://yuukubo.github.io/calendarp5/
 # c8  : fix bug ; can't back to feb, jan  
 # c9  : add leap year  
 # c10 : add jump yaer  
+# c11 : test canvas size  
